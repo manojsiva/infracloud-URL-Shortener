@@ -57,11 +57,12 @@ public class IDConverter {
 		}
 
 	}
+
 	public static String createUniqueId(Long id) {
-		List<Integer>uniqueId = convertBase10toBase62ID(id);
-		
+		List<Integer> uniqueId = convertBase10toBase62ID(id);
+
 		StringBuilder uniqueURLId = new StringBuilder();
-		for(int each: uniqueId) {
+		for (int each : uniqueId) {
 			uniqueURLId.append(indexToCharTable.get(each));
 		}
 		return uniqueURLId.toString();
@@ -76,5 +77,24 @@ public class IDConverter {
 		}
 		return digits;
 	}
+
+	public static Long getDictionaryKeyFromUniqueID(String uniqueId) {
+		List<Character> base62Ids = new ArrayList<>();
+		for(int i=0;i<base62Ids.size();i++) {
+			base62Ids.add(uniqueId.charAt(i));
+		}
+		Long dictionaryKey = convertBase62toBase10ID(base62Ids);
+		
+		return dictionaryKey;
+	}
 	
+	private static Long convertBase62toBase10ID(List<Character> ids) {
+		long id = 0L;
+		for (int i = 0, exp = ids.size() - 1; i < ids.size(); i++) {
+			int base10 = charToIndexTable.get(ids.get(i));
+			id += (base10 * Math.pow(62.0, exp));
+		}
+		return id;
+	}
+
 }
